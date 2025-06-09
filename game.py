@@ -1,9 +1,11 @@
 import random_ai as rm
 import finds_winning_move_ai as wn
 import finds_winning_and_losing_moves_ai as wln
+import minimax as max
+import street_hardened_minimax as smax
 import random
 import sys 
-import minimax as max
+
 
 width = 3
 height = 3
@@ -129,6 +131,8 @@ def which_player_move(player, board, current_player):
         move = get_move(current_player)
     elif player == "minimax":
         move = max.minimax_ai(board, current_player)
+    elif player == "street_minimax":
+        move = smax.minimax_ai(board, current_player)
     
     return move
 
@@ -148,7 +152,7 @@ def main():
     
     random_player = random.randint(0, 1)
 
-    player1 = "player"
+    player1 = "street_minimax"
     player2 = "minimax"
 
     while True:

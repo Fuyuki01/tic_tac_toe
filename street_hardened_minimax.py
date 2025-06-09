@@ -18,12 +18,18 @@ def minimax_ai(board, current_player):
         if best_score is None or best_score < score:
             best_score = score
             best_move = move
-        
+
     return best_move
 
 
 def minimax(board, current_player, original_player):
     winner = game.game_won(board)
+    corners = [
+        (0, 0),
+        (0, game.get_width(board) - 1),
+        (game.get_height(board) - 1, 0),
+        (game.get_height(board) - 1, game.get_width(board) - 1)
+    ]
 
     if winner is not None:
         if winner == original_player:
@@ -41,9 +47,17 @@ def minimax(board, current_player, original_player):
     for move in legal_moves:
         new_board = copy.deepcopy(board)
         game.make_move(new_board, move, current_player)
+        
+        row_move = is_in_row(new_board, current_player)
 
         opponent = get_opponent(current_player)
         score = minimax(new_board, opponent, original_player)
+        if move in corners:
+            score += 1
+        
+        if row_move is not None:
+            score += row_move
+        
         scores.append(score)
     
     if current_player == original_player:
@@ -62,5 +76,22 @@ def get_opponent(current_player):
     else:
         return "O"
 
-        
 
+def is_in_row(board, current_player):
+    for y in range(game.get_height(board)):
+        rows = []
+        for x in range(game.get_width(board)):
+            rows.append(board[y][x])
+
+        if rows.count(current_player) == 2 and " " in rows:
+            return 1
+
+
+    for x in range(game.get_width(board)):
+        columns = []
+        for y in range(game.get_height(board)):
+            columns.append(board[y][x])
+        if columns.count(current_player) == 2 and " " in columns:
+            return 1
+
+    
