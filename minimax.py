@@ -1,6 +1,7 @@
 import copy
 import game 
 
+cache = {}
 
 def minimax_ai(board, current_player):
     best_move = None
@@ -42,8 +43,19 @@ def minimax(board, current_player, original_player):
         new_board = copy.deepcopy(board)
         game.make_move(new_board, move, current_player)
 
-        opponent = get_opponent(current_player)
-        score = minimax(new_board, opponent, original_player)
+        board_cache_key = str(new_board)
+
+        if board_cache_key not in cache:
+
+
+            opponent = get_opponent(current_player)
+            score = minimax(new_board, opponent, original_player)
+
+            cache[board_cache_key] = score
+
+        else:
+            score = cache[board_cache_key]
+        
         scores.append(score)
     
     if current_player == original_player:
